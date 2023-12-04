@@ -22,6 +22,6 @@ for card, card_number in zip(cards, n_instances_per_card):
     my_numbers = card.split(": ")[1].split(" | ")[1].split()
     n_numbers_in_winning_numbers = sum(1 for number in my_numbers if number in winning_numbers)
 
-    for next_card_number in range(1, 1+n_numbers_in_winning_numbers):
-        n_instances_per_card[card_number+next_card_number] += n_instances_per_card[card_number]
+    for next_card_number in range(card_number+1, card_number+n_numbers_in_winning_numbers+1):
+        n_instances_per_card[next_card_number] += n_instances_per_card[card_number]
 print(sum(n_instances_per_card.values()))
