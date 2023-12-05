@@ -58,12 +58,14 @@ for conversion_line in lines[2:]:
         new_number_ranges_to_convert += [( overlapping_range_start - (source_range_start - destination_range_start), overlapping_range_length)]
         converted_numbers += [(overlapping_range_start,overlapping_range_length)]
 
-        if (to_convert_range_start < source_range_start and to_convert_range_start+to_convert_range_length_number >= source_range_start):
+        if (to_convert_range_start < source_range_start and 
+            to_convert_range_start+to_convert_range_length_number >= source_range_start):
             #      ----------
             # ---------
             number_ranges_to_convert += [(to_convert_range_start, overlapping_range_start-to_convert_range_start)]
 
-        elif (source_range_start <= to_convert_range_start <= source_range_start + range_length_line and to_convert_range_start+to_convert_range_length_number>source_range_start+range_length_line):
+        elif (source_range_start <= to_convert_range_start <= source_range_start + range_length_line and 
+              to_convert_range_start+to_convert_range_length_number>source_range_start+range_length_line):
             #     -----------
             #          ----------
             number_ranges_to_convert += [(
