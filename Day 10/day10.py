@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-# with open("Day 10/input.txt") as file:
-#     rows = file.read().splitlines()
+with open("Day 10/input.txt") as file:
+    rows = file.read().splitlines()
 
-# # find starting position
-# for y, row in enumerate(rows):
-#     x = row.find("S")
-#     if x != -1:
-#         start_position = (x, y)
-#        break
+# find starting position
+for y, row in enumerate(rows):
+    x = row.find("S")
+    if x != -1:
+        start_position = (x, y)
+        break
 
 # 0 is up, 1 is right, 2 is down, 3 is left
 def new_position_and_direction(current_position, current_direction):
@@ -50,15 +50,15 @@ def new_position_and_direction(current_position, current_direction):
             return [new_position,0]       
     return None
 
-# current_positions=[[start_position, i] for i in range(4)]
+current_positions=[[start_position, i] for i in range(4)]
 
-# steps_taken = 0
-# while len(current_positions) != 2 or not (current_positions[0][0] == current_positions[1][0]):
-#     for position_idx, position in enumerate(current_positions):
-#         current_positions[position_idx] = new_position_and_direction(position[0], position[1])
-#     current_positions = [pos for pos in current_positions if pos is not None]
-#     steps_taken +=1
-# print(steps_taken)
+steps_taken = 0
+while len(current_positions) != 2 or not (current_positions[0][0] == current_positions[1][0]):
+    for position_idx, position in enumerate(current_positions):
+        current_positions[position_idx] = new_position_and_direction(position[0], position[1])
+    current_positions = [pos for pos in current_positions if pos is not None]
+    steps_taken +=1
+print(steps_taken)
 
 
 # part two
