@@ -29,33 +29,34 @@ from itertools import combinations
 # print(sum_of_possible_arrangements)
 
 # part two
-with open("Day 12/test.txt") as file:
+with open("Day 12/input.txt") as file:
     field = file.read().splitlines()
 
 from functools import lru_cache
 
 @lru_cache(None)
-def is_possible_arrangement(row: str, wanted_groups, current_pos: int, possible_arrangements, groups_so_far):
-    wanted_groups_so_far = wanted_groups[:len(groups_so_far)]
+def is_possible_arrangement(row: str, wanted_groups, current_group_size):
+    if not row:
+        return not wanted_groups and not current_group_size
 
     possible_arrangements=0
-    if groups_so_far and wanted_groups_so_far and (groups_so_far[:-1] != wanted_groups_so_far[:-1] or groups_so_far[-1] > wanted_groups_so_far[-1]):
-        return possible_arrangements
-
-    for current_pos, char in enumerate(row[current_pos:], current_pos):
-        if char !="?":
-            continue
-        groups_so_far = tuple(len(group) for group in row[:current_pos].replace("."," ").split())
-        possible_arrangements+=is_possible_arrangement(row[:current_pos] + "#" + row[current_pos+1:], wanted_groups, current_pos+1, possible_arrangements, groups_so_far)
-        possible_arrangements+=is_possible_arrangement(row[:current_pos] + "." + row[current_pos+1:], wanted_groups, current_pos+1, possible_arrangements, groups_so_far)
-        return possible_arrangements
-
-    if current_pos == len(row) - 1 and "?" not in row:
-        counts_of_damaged_spings = tuple(len(group) for group in row.replace("."," ").split())
-        if counts_of_damaged_spings == wanted_groups:
-            return possible_arrangements+1
+    if row[0] =="#":
+        possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups, current_group_size+1) # #
+    elif row[0] == ".":
+        if current_group_size != 0:
+            if wanted_groups and current_group_size == wanted_groups[0]:
+                possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups[1:], 0) # .
         else:
-            return possible_arrangements
+            possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups, current_group_size) # .
+
+    else:
+        possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups, current_group_size+1) # try #
+
+        if current_group_size != 0:
+            if wanted_groups and current_group_size == wanted_groups[0]:
+                possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups[1:], 0) # .
+        else:
+            possible_arrangements+=is_possible_arrangement(row[1:], wanted_groups, current_group_size) # .
 
     return possible_arrangements
 
@@ -66,11 +67,11 @@ for row in field:
     row, wanted_groups = row.split()
     wanted_groups = [int(group) for group in wanted_groups.split(",")] 
 
-    row = "?".join([row] * 5) +"."
-    wanted_groups = tuple(wanted_groups * 5)
+    row = "?".join([row]*5) +"."
+    wanted_groups = tuple(wanted_groups*5)
     groups_so_far = tuple()
 
-    possible_arrangements = is_possible_arrangement(row, wanted_groups, 0, 0, groups_so_far)
+    possible_arrangements = is_possible_arrangement(row, wanted_groups, 0)
     sum_of_possible_arrangements += possible_arrangements
     print(possible_arrangements)
 
