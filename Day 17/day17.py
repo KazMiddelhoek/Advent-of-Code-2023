@@ -23,6 +23,8 @@ unvisited_locs = shortest_distances.copy()
 i=0
 end_point =len(map[0])-2 + (len(map)-2)*1j
 while end_point not in visited_locs_location_only:
+    if not i%100:
+        print(i)
     i+=1
     if position[1] == RIGHT:
         neighbor_nodes = [
@@ -50,12 +52,14 @@ while end_point not in visited_locs_location_only:
         ]         
 
     # filter possible neighbors
-    neighbor_nodes = [neighbor for neighbor in neighbor_nodes if map[int(neighbor[0].imag)][int(neighbor[0].real)] != "#" and neighbor[2] < 4 and neighbor not in visited_locs]
+    neighbor_nodes = [neighbor for neighbor in neighbor_nodes if map[int(neighbor[0].imag)][int(neighbor[0].real)] != "#" and neighbor[2] < 4]
+    neighbor_nodes = [neighbor for neighbor in neighbor_nodes if not any((neighbor[0], neighbor[1], poss) in visited_locs for poss in range(1,neighbor[2]+1))]
 
     for neighbor in neighbor_nodes:
         shortest_distances[neighbor] = min(shortest_distances[neighbor], shortest_distances[position] + int(map[int(neighbor[0].imag)][int(neighbor[0].real)]))
+        unvisited_locs[neighbor] = shortest_distances[neighbor]
 
-    del unvisited_locs[position]
+    unvisited_locs.pop(position)
     visited_locs.add(position)
     visited_locs_location_only.add(position[0])
     
