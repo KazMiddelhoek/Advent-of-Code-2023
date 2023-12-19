@@ -1,4 +1,4 @@
-with open("Day 18/test.txt", newline="") as file:
+with open("Day 18/input.txt", newline="") as file:
     dig_plan = file.read().splitlines()
 
 current_pos = (0,0)
